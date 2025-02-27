@@ -34,18 +34,22 @@ export default function Home() {
   return (
     <>
       <h1>こんにちは世界</h1>
-      <Link
-        href={{
-          pathname: "/result",
-          query: {
-            lat: coords?.latitude,
-            lng: coords?.longitude,
-            range: range,
-          },
-        }}
-      >
-        検索画面
-      </Link>
+      {ranges.map((e) => {
+        return (
+          <Link
+            href={{
+              pathname: "/result",
+              query: {
+                lat: coords?.latitude,
+                lng: coords?.longitude,
+                range: e.value,
+              },
+            }}
+          >
+            現在位置から{e.range}m以内で検索
+          </Link>
+        );
+      })}
     </>
   );
 }
