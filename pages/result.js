@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -19,7 +20,7 @@ export default function Result() {
       (async () => {
         try {
           const response = await fetch(
-            `/api/API?lat=${queryParams.lat}&lng=${queryParams.lng}&range=${queryParams.range}`
+            `/api/GetNearShops?lat=${queryParams.lat}&lng=${queryParams.lng}&range=${queryParams.range}`
           );
           console.log(response);
           const result = await response.json();
@@ -37,7 +38,19 @@ export default function Result() {
   return (
     <>
       {shops?.map((e) => {
-        return <p key={e.id}>{e.name}</p>;
+        return (
+          <Link
+            key={e.id}
+            href={{
+              pathname: "/detail",
+              query: {
+                id: e.id,
+              },
+            }}
+          >
+            {e.name}
+          </Link>
+        );
       })}
     </>
   );

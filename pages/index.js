@@ -5,6 +5,11 @@ export default function Home() {
   const [coords, setCoords] = useState();
   const [range, setRange] = useState(3);
 
+  const ranges = [300, 500, 1000, 2000, 3000].map((e, i) => ({
+    range: e,
+    value: i + 1,
+  }));
+
   useEffect(() => {
     if (!navigator.geolocation) {
       console.log("このブラウザーは位置情報に対応していません");
