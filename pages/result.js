@@ -1,3 +1,4 @@
+import { Box, Button, Stack, Typography } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -37,21 +38,39 @@ export default function Result() {
 
   return (
     <>
-      {shops?.map((e) => {
-        return (
-          <Link
-            key={e.id}
-            href={{
-              pathname: "/detail",
-              query: {
-                id: e.id,
-              },
-            }}
-          >
-            {e.name}
-          </Link>
-        );
-      })}
+      <Stack spacing={2}>
+        {shops?.map((e) => {
+          return (
+            <div key={e.id}>
+              <DisplayShop shop={e} />
+            </div>
+          );
+        })}
+      </Stack>
     </>
+  );
+}
+
+function DisplayShop({ shop }) {
+  return (
+    <Box border={1}>
+      <Box
+        component="img"
+        src={shop?.photo?.pc?.l}
+        alt="お店の写真"
+        sx={{ width: "auto", height: "100px" }}
+      />
+      <Link
+        href={{
+          pathname: "/detail",
+          query: {
+            id: shop.id,
+          },
+        }}
+      >
+        {shop.name}
+      </Link>
+      <Typography>{shop.access}</Typography>
+    </Box>
   );
 }

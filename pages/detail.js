@@ -1,3 +1,4 @@
+import { Box, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -31,5 +32,19 @@ export default function Detail() {
     }
   }, [queryParams]);
 
-  return <>{shopData?.name}</>;
+  console.log(shopData);
+
+  return (
+    <>
+      <Typography>{shopData?.name}</Typography>
+      <Typography>住所：{shopData?.address}</Typography>
+      <Typography>営業時間：{shopData?.open}</Typography>
+      <Box
+        component="img"
+        src={shopData?.photo?.pc?.l}
+        alt="お店の写真"
+        sx={{ width: "auto", height: "100px" }}
+      />
+    </>
+  );
 }
