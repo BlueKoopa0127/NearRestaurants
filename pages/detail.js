@@ -6,26 +6,6 @@ export default function Detail() {
   const router = useRouter();
   const [queryParams, setQueryParams] = useState(null);
   const [shopData, setShopData] = useState();
-  const [coords, setCoords] = useState();
-
-  useEffect(() => {
-    if (!navigator.geolocation) {
-      console.log("このブラウザーは位置情報に対応していません");
-    } else {
-      console.log("位置情報を取得中…");
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          setCoords({
-            latitude: pos.coords.latitude,
-            longitude: pos.coords.longitude,
-          });
-        },
-        (err) => {
-          console.warn(`ERROR(${err.code}): ${err.message}`);
-        }
-      );
-    }
-  }, []);
 
   useEffect(() => {
     if (router.isReady) {

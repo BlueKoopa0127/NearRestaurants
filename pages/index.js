@@ -11,10 +11,7 @@ export default function Home() {
   }));
 
   useEffect(() => {
-    if (!navigator.geolocation) {
-      console.log("このブラウザーは位置情報に対応していません");
-    } else {
-      console.log("位置情報を取得中…");
+    if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (pos) => {
           setCoords({
@@ -28,8 +25,6 @@ export default function Home() {
       );
     }
   }, []);
-
-  console.log(coords);
 
   return (
     <Box
