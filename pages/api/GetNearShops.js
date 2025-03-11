@@ -3,7 +3,7 @@ export default async function handler(req, res) {
   const apiKey = process.env.API_KEY;
 
   const response = await fetch(
-    `https://webservice.recruit.co.jp/hotpepper/gourmet/v1/?key=${apiKey}&lat=${lat}&lng=${lng}&range=${range}&start=${start}&format=json`
+    `https://webservice.recruit.co.jp/hotpepper/gourmet/v1/?key=${apiKey}&lat=${lat}&lng=${lng}&range=${range}&start=${start}&order=4&format=json`
   );
   if (response.status == 200) {
     const result = await response.json();
