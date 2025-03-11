@@ -14,6 +14,7 @@ export default function App({ Component, pageProps }) {
       <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
         <Component {...pageProps} />
       </Container>
+      <Footer />
     </>
   );
 }
@@ -37,5 +38,31 @@ function Header() {
         </Link>
       </Toolbar>
     </AppBar>
+  );
+}
+
+function Footer() {
+  return (
+    <Box
+      component="footer"
+      sx={{
+        bgcolor: "#1976d2",
+        color: "white",
+        textAlign: "center",
+        py: 2,
+        mt: 4,
+      }}
+    >
+      <a href="http://webservice.recruit.co.jp/">
+        <img
+          src="http://webservice.recruit.co.jp/banner/hotpepper-m.gif"
+          alt="ホットペッパーグルメ Webサービス"
+          width="88"
+          height="35"
+          border="0"
+          title="ホットペッパーグルメ Webサービス"
+        />
+      </a>
+    </Box>
   );
 }
