@@ -47,27 +47,37 @@ export default function Result() {
   return (
     <Box sx={{ bgcolor: "#f5f5f5", py: 4 }}>
       <Container maxWidth="md">
-        <PageComponent
-          start={start}
-          queryParams={queryParams}
-          shops={shops}
-          pageMax={pageMax}
-        />
-
-        <Stack spacing={3} mt={3}>
-          {shops.map((shop) => (
-            <DisplayShop key={shop.id} shop={shop} queryParams={queryParams} />
-          ))}
+        <Stack spacing={3}>
+          {shops.length === 0 ? (
+            <Typography variant="body1">見つかりませんでした</Typography>
+          ) : (
+            <>
+              <Box mt={4}>
+                <PageComponent
+                  start={start}
+                  queryParams={queryParams}
+                  shops={shops}
+                  pageMax={pageMax}
+                />
+              </Box>
+              {shops.map((shop) => (
+                <DisplayShop
+                  key={shop.id}
+                  shop={shop}
+                  queryParams={queryParams}
+                />
+              ))}
+              <Box mt={4}>
+                <PageComponent
+                  start={start}
+                  queryParams={queryParams}
+                  shops={shops}
+                  pageMax={pageMax}
+                />
+              </Box>
+            </>
+          )}
         </Stack>
-
-        <Box mt={4}>
-          <PageComponent
-            start={start}
-            queryParams={queryParams}
-            shops={shops}
-            pageMax={pageMax}
-          />
-        </Box>
       </Container>
     </Box>
   );
