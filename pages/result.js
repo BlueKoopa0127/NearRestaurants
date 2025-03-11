@@ -1,4 +1,14 @@
-import { Box, Button, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  Stack,
+  Typography,
+  Card,
+  CardMedia,
+  CardContent,
+  CardActions,
+} from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -6,8 +16,7 @@ import { useEffect, useState } from "react";
 export default function Result() {
   const router = useRouter();
   const [queryParams, setQueryParams] = useState(null);
-
-  const [shops, setShops] = useState();
+  const [shops, setShops] = useState([]);
   const [pageMax, setPageMax] = useState(0);
 
   useEffect(() => {
@@ -23,11 +32,9 @@ export default function Result() {
           const response = await fetch(
             `/api/GetNearShops?lat=${queryParams.lat}&lng=${queryParams.lng}&range=${queryParams.range}&start=${queryParams.start}`
           );
-          console.log(response);
           const result = await response.json();
-          setShops(result.results.shop);
-          setPageMax(result.results.results_available);
-          console.log(result);
+          setShops(result.results.shop || []);
+          setPageMax(result.results.results_available || 0);
         } catch (error) {
           console.error("Error fetching data:", error);
         }
@@ -35,51 +42,54 @@ export default function Result() {
     }
   }, [queryParams]);
 
-  console.log(shops);
+  const start = parseInt(queryParams?.start || 1);
 
   return (
-    <>
-      <PageComponent
-        queryParams={queryParams}
-        shops={shops}
-        pageMax={pageMax}
-      />
-      <Box mt={1} />
-      <Stack spacing={1}>
-        {shops?.map((e) => {
-          return (
-            <div key={e.id}>
-              <DisplayShop shop={e} />
-            </div>
-          );
-        })}
-      </Stack>
-      <Box mt={1} />
-      <PageComponent
-        queryParams={queryParams}
-        shops={shops}
-        pageMax={pageMax}
-      />
-    </>
+    <Box sx={{ bgcolor: "#f5f5f5", py: 4 }}>
+      <Container maxWidth="md">
+        <PageComponent
+          start={start}
+          queryParams={queryParams}
+          shops={shops}
+          pageMax={pageMax}
+        />
+
+        <Stack spacing={3} mt={3}>
+          {shops.map((shop) => (
+            <DisplayShop key={shop.id} shop={shop} />
+          ))}
+        </Stack>
+
+        <Box mt={4}>
+          <PageComponent
+            start={start}
+            queryParams={queryParams}
+            shops={shops}
+            pageMax={pageMax}
+          />
+        </Box>
+      </Container>
+    </Box>
   );
 }
 
-function PageComponent({ queryParams, shops, pageMax }) {
-  const start = parseInt(queryParams?.start);
+function PageComponent({ start, queryParams, shops, pageMax }) {
   return (
-    <Stack direction="row" spacing={1}>
+    <Stack
+      direction="row"
+      spacing={2}
+      justifyContent="center"
+      alignItems="center"
+      mt={2}
+    >
       {1 <= start - 10 && (
         <Button
           variant="contained"
-          color="primary"
-          fullWidth
-          as={Link}
+          component={Link}
           href={{
             pathname: "/result",
             query: {
-              lat: queryParams?.lat,
-              lng: queryParams?.lng,
-              range: queryParams?.range,
+              ...queryParams,
               start: start - 10,
             },
           }}
@@ -87,21 +97,17 @@ function PageComponent({ queryParams, shops, pageMax }) {
           前のページ
         </Button>
       )}
-      <Typography>
-        {start}~{start + shops?.length - 1}件を表示
+      <Typography variant="body1">
+        {start} ~ {start + (shops?.length || 0) - 1} 件を表示
       </Typography>
       {start + 10 <= pageMax && (
         <Button
           variant="contained"
-          color="primary"
-          fullWidth
-          as={Link}
+          component={Link}
           href={{
             pathname: "/result",
             query: {
-              lat: queryParams?.lat,
-              lng: queryParams?.lng,
-              range: queryParams?.range,
+              ...queryParams,
               start: start + 10,
             },
           }}
@@ -115,24 +121,49 @@ function PageComponent({ queryParams, shops, pageMax }) {
 
 function DisplayShop({ shop }) {
   return (
-    <Box border={1}>
-      <Box
+    <Card sx={{ display: "flex", borderRadius: 3, boxShadow: 3 }}>
+      <CardMedia
         component="img"
-        src={shop?.photo?.pc?.l}
-        alt="お店の写真"
-        sx={{ width: "auto", height: "100px" }}
-      />
-      <Link
-        href={{
-          pathname: "/detail",
-          query: {
-            id: shop.id,
-          },
+        sx={{
+          width: 160,
+          height: 120,
+          objectFit: "cover",
+          borderRadius: "12px 0 0 12px",
         }}
-      >
-        {shop.name}
-      </Link>
-      <Typography>{shop.access}</Typography>
-    </Box>
+        image={shop?.photo?.pc?.l}
+        alt="お店の写真"
+      />
+      <Box sx={{ display: "flex", flexDirection: "column", flexGrow: 1 }}>
+        <CardContent>
+          <Typography variant="h6" fontWeight="bold" gutterBottom>
+            <Link
+              href={{
+                pathname: "/detail",
+                query: { id: shop.id },
+              }}
+              style={{ textDecoration: "none", color: "#1976d2" }}
+            >
+              {shop.name}
+            </Link>
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            {shop.access}
+          </Typography>
+        </CardContent>
+        <CardActions sx={{ px: 2, pb: 2 }}>
+          <Button
+            size="small"
+            variant="outlined"
+            component={Link}
+            href={{
+              pathname: "/detail",
+              query: { id: shop.id },
+            }}
+          >
+            詳細を見る
+          </Button>
+        </CardActions>
+      </Box>
+    </Card>
   );
 }
