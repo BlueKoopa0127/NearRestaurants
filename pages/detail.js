@@ -6,6 +6,26 @@ export default function Detail() {
   const router = useRouter();
   const [queryParams, setQueryParams] = useState(null);
   const [shopData, setShopData] = useState();
+  const [coords, setCoords] = useState();
+
+  useEffect(() => {
+    if (!navigator.geolocation) {
+      console.log("このブラウザーは位置情報に対応していません");
+    } else {
+      console.log("位置情報を取得中…");
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          setCoords({
+            latitude: pos.coords.latitude,
+            longitude: pos.coords.longitude,
+          });
+        },
+        (err) => {
+          console.warn(`ERROR(${err.code}): ${err.message}`);
+        }
+      );
+    }
+  }, []);
 
   useEffect(() => {
     if (router.isReady) {
@@ -131,16 +151,29 @@ export default function Detail() {
 
       <Divider sx={{ my: 2 }} />
 
-      <Button
-        variant="contained"
-        color="primary"
-        href={shopData.urls?.pc}
-        target="_blank"
-        rel="noopener noreferrer"
-        sx={{ mt: 2 }}
-      >
-        ホットペッパーで詳しく見る
-      </Button>
+      <Stack direction="row" spacing={2}>
+        <Button
+          variant="contained"
+          color="primary"
+          href={shopData.urls?.pc}
+          target="_blank"
+          rel="noopener noreferrer"
+          sx={{ mt: 2 }}
+        >
+          ホットペッパーで詳しく見る
+        </Button>
+
+        <Button
+          variant="contained"
+          color="primary"
+          href={`https://www.google.com/maps?q=${shopData.lat},${shopData.lng}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          sx={{ mt: 2 }}
+        >
+          GoogleMapで見る
+        </Button>
+      </Stack>
     </Box>
   );
 }
