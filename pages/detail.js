@@ -86,6 +86,10 @@ export default function Detail() {
           {shopData.close}
         </Typography>
         <Typography>
+          <strong>予算：</strong>
+          {shopData.budget.name}
+        </Typography>
+        <Typography>
           <strong>平均予算：</strong>
           {shopData.budget.average}
         </Typography>

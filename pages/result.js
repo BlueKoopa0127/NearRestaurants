@@ -147,7 +147,10 @@ function DisplayShop({ shop, queryParams }) {
             </Link>
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            {shop.access}
+            {shop.genre.catch}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            予算：{shop.budget.name}
           </Typography>
           <Typography variant="body2" color="text.secondary">
             直線距離：
@@ -160,6 +163,9 @@ function DisplayShop({ shop, queryParams }) {
               )
             )}
             m
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            アクセス：{shop.access}
           </Typography>
         </CardContent>
         <CardActions sx={{ px: 2, pb: 2 }}>
