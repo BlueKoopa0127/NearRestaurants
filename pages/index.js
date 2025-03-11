@@ -36,24 +36,24 @@ export default function Home() {
       <Stack spacing={2}>
         {ranges.map((e) => {
           return (
-            <>
-              <Button
-                variant="contained"
-                color="primary"
-                fullWidth
-                as={Link}
-                href={{
-                  pathname: "/result",
-                  query: {
-                    lat: coords?.latitude,
-                    lng: coords?.longitude,
-                    range: e.value,
-                  },
-                }}
-              >
-                現在位置から{e.range}m以内で検索
-              </Button>
-            </>
+            <Button
+              key={e.value}
+              variant="contained"
+              color="primary"
+              fullWidth
+              as={Link}
+              href={{
+                pathname: "/result",
+                query: {
+                  lat: coords?.latitude,
+                  lng: coords?.longitude,
+                  range: e.value,
+                  start: 1,
+                },
+              }}
+            >
+              現在位置から{e.range}m以内で検索
+            </Button>
           );
         })}
       </Stack>
