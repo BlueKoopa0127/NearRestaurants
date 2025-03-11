@@ -56,7 +56,7 @@ export default function Result() {
 
         <Stack spacing={3} mt={3}>
           {shops.map((shop) => (
-            <DisplayShop key={shop.id} shop={shop} />
+            <DisplayShop key={shop.id} shop={shop} queryParams={queryParams} />
           ))}
         </Stack>
 
@@ -119,7 +119,7 @@ function PageComponent({ start, queryParams, shops, pageMax }) {
   );
 }
 
-function DisplayShop({ shop }) {
+function DisplayShop({ shop, queryParams }) {
   return (
     <Card sx={{ display: "flex", borderRadius: 3, boxShadow: 3 }}>
       <CardMedia
@@ -149,6 +149,18 @@ function DisplayShop({ shop }) {
           <Typography variant="body2" color="text.secondary">
             {shop.access}
           </Typography>
+          <Typography variant="body2" color="text.secondary">
+            直線距離：
+            {Math.round(
+              haversineDistance(
+                queryParams.lat,
+                queryParams.lng,
+                shop.lat,
+                shop.lng
+              )
+            )}
+            m
+          </Typography>
         </CardContent>
         <CardActions sx={{ px: 2, pb: 2 }}>
           <Button
@@ -166,4 +178,18 @@ function DisplayShop({ shop }) {
       </Box>
     </Card>
   );
+}
+
+function haversineDistance(lat1, lng1, lat2, lng2) {
+  const toRad = (deg) => deg * (Math.PI / 180);
+  const R = 6378137;
+
+  const dLat = toRad(lat2 - lat1);
+  const dLon = toRad(lng2 - lng1);
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+  return R * c;
 }
